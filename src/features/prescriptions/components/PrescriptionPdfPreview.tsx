@@ -1,27 +1,32 @@
 import { ArrowLeft, Download, Printer } from "lucide-react"
-import { Document, Page, PDFViewer, StyleSheet, Text, View } from "@react-pdf/renderer"
+import { Document, Image, Page, PDFViewer, StyleSheet, Text, View } from "@react-pdf/renderer"
+import QRCode from "qrcode"
+import { useEffect, useState } from "react"
 import type { ReactNode } from "react"
 import { Button } from "@/components/ui/button"
 
 type Prescription = { id: string; patient: string; issued: string }
 
 const styles = StyleSheet.create({
-  page: { padding: 38, fontFamily: "Helvetica", color: "#555", fontSize: 9 },
+  page: { padding: 28, fontFamily: "Helvetica", color: "#555", fontSize: 8 },
   brand: { color: "#70004f", fontSize: 10, fontWeight: 700, letterSpacing: 1.2, marginBottom: 4 },
-  title: { color: "#70004f", fontSize: 21, fontWeight: 700, textAlign: "center", letterSpacing: 0.5, marginBottom: 8 },
-  bar: { height: 8, backgroundColor: "#ee3f49", marginHorizontal: -38, marginBottom: 16 },
-  columns: { flexDirection: "row", gap: 24 },
+  title: { color: "#70004f", fontSize: 20, fontWeight: 700, textAlign: "center", letterSpacing: 0.5, marginBottom: 6 },
+  bar: { height: 7, backgroundColor: "#ee3f49", marginHorizontal: -28, marginBottom: 11 },
+  columns: { flexDirection: "row", gap: 20 },
   column: { flex: 1 },
-  field: { marginBottom: 8 },
+  field: { marginBottom: 5 },
   label: { color: "#8c0b5d", marginBottom: 2 },
-  section: { borderTop: 8, borderTopColor: "#ffc18d", paddingTop: 5, color: "#70004f", fontSize: 10, fontWeight: 700, marginTop: 5, marginBottom: 9 },
-  card: { borderWidth: 1, borderColor: "#e1e2eb", padding: 9, marginBottom: 10 },
+  section: { borderTop: 7, borderTopColor: "#ffc18d", paddingTop: 4, color: "#70004f", fontSize: 9, fontWeight: 700, marginTop: 3, marginBottom: 6 },
+  card: { borderWidth: 1, borderColor: "#e1e2eb", padding: 7, marginBottom: 7 },
   muted: { color: "#777", fontSize: 8 },
   table: { borderWidth: 1, borderColor: "#dfe1ea" },
   row: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#dfe1ea" },
   header: { backgroundColor: "#f0f0fa" },
-  cell: { flex: 1, padding: 6, textAlign: "center", borderRightWidth: 1, borderRightColor: "#dfe1ea" },
-  footer: { borderTopWidth: 1, borderTopColor: "#dfe1ea", marginTop: 16, paddingTop: 8, color: "#777", fontSize: 8 },
+  cell: { flex: 1, padding: 4, textAlign: "center", borderRightWidth: 1, borderRightColor: "#dfe1ea" },
+  footer: { borderTopWidth: 1, borderTopColor: "#dfe1ea", marginTop: 9, paddingTop: 5, color: "#777", fontSize: 7 },
+  qrBox: { width: 132, alignItems: "center", marginLeft: 12 },
+  qr: { width: 120, height: 120 },
+  qrCaption: { color: "#777", fontSize: 6, textAlign: "center", marginTop: 3 },
 })
 
 const medications = [
@@ -34,24 +39,43 @@ const medications = [
 ]
 
 export function PrescriptionPdfPreview({ prescription, onBack }: { prescription: Prescription; onBack: () => void }) {
+  const [qrCode, setQrCode] = useState<string | null>(null)
+
+  useEffect(() => {
+    let active = true
+    void QRCode.toDataURL(`baylan://prescription/${prescription.id}`, {
+      errorCorrectionLevel: "M",
+      margin: 1,
+      width: 180,
+    }).then((dataUrl) => {
+      if (active) setQrCode(dataUrl)
+    })
+    return () => {
+      active = false
+    }
+  }, [prescription.id])
+
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <Button variant="outline" className="h-8 gap-2 text-xs" onClick={onBack}><ArrowLeft className="size-3.5" /> Back to prescriptions</Button>
         <div className="flex gap-2"><Button variant="outline" className="h-8 gap-2 text-xs" onClick={() => window.print()}><Printer className="size-3.5" /> Print</Button><Button variant="outline" className="h-8 gap-2 text-xs" onClick={() => window.print()}><Download className="size-3.5" /> Save PDF</Button></div>
       </div>
-      <div className="min-h-0 flex-1 overflow-hidden rounded-md border border-sidebar-border bg-[#eef0f5] p-3 sm:p-6">
-        <PDFViewer className="h-full min-h-[720px] w-full" showToolbar={false}><PrescriptionDocument prescription={prescription} /></PDFViewer>
+      <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto rounded-md border border-sidebar-border bg-[#eef0f5] p-3 sm:p-6">
+        <PDFViewer className="h-[calc(100dvh-190px)] min-h-[820px] w-full" showToolbar={false}><PrescriptionDocument prescription={prescription} qrCode={qrCode} /></PDFViewer>
       </div>
     </div>
   )
 }
 
-function PrescriptionDocument({ prescription }: { prescription: Prescription }) {
+function PrescriptionDocument({ prescription, qrCode }: { prescription: Prescription; qrCode: string | null }) {
   return (
     <Document title={`${prescription.id} Prescription`} author="Baylan Clinical Operations">
-      <Page size="A4" style={styles.page}>
-        <Text style={styles.brand}>BAYLAN CLINICAL OPERATIONS</Text>
+      <Page size="A4" style={styles.page} wrap={false}>
+        <View style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between" }}>
+          <View><Text style={styles.brand}>BAYLAN CLINICAL OPERATIONS</Text><Text style={styles.muted}>Electronic prescription record</Text></View>
+          <View style={styles.qrBox}>{qrCode && <Image src={qrCode} style={styles.qr} />}<Text style={styles.qrCaption}>Scan to verify {prescription.id}</Text></View>
+        </View>
         <Text style={styles.title}>PRESCRIPTION TEMPLATE</Text>
         <View style={styles.bar} />
         <View style={styles.columns}>
