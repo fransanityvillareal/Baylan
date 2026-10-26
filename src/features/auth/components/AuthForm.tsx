@@ -1,25 +1,34 @@
 import { useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import headerImage from "@/assets/Header.svg"
 
 export function AuthForm() {
-  const [isLogin, setIsLogin] = useState(false)
+  const location = useLocation()
+  const [params] = useSearchParams()
+  const [isLogin, setIsLogin] = useState(location.pathname !== "/signup")
   const navigate = useNavigate()
 
   const handleAuthAction = (e: React.FormEvent) => {
     e.preventDefault()
-    // Normally you'd authenticate here, then redirect:
-    navigate("/dashboard")
+    const role = params.get("role")
+    if (role === "doctor" || role === "pharmacist") {
+      window.localStorage.setItem("baylan-role", role)
+    }
+    if (isLogin) {
+      navigate(`/dashboard${params.toString() ? `?${params.toString()}` : ""}`)
+    } else {
+      navigate(`/signup/onboarding${location.search}`)
+    }
   }
 
   return (
     <div className="flex min-h-svh w-full flex-col items-center justify-center bg-background p-6">
       <div className="flex w-full max-w-sm flex-col items-center gap-6">
         {/* Logo */}
-        <div className="flex items-center justify-center mb-4">
+        <div className="mb-4 flex items-center justify-center">
           <img src={headerImage} alt="Header Logo" className="h-14 w-auto" />
         </div>
 
@@ -36,12 +45,26 @@ export function AuthForm() {
             </p>
           </div>
 
-          <form onSubmit={handleAuthAction} className="mt-6 flex flex-col gap-4" noValidate>
+          <form
+            onSubmit={handleAuthAction}
+            className="mt-6 flex flex-col gap-4"
+            noValidate
+          >
             <Button
               type="button"
               variant="outline"
               className="h-8 w-full text-sm dark:bg-black dark:text-white dark:hover:bg-accent"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => {
+                const role = params.get("role")
+                if (role === "doctor" || role === "pharmacist") {
+                  window.localStorage.setItem("baylan-role", role)
+                }
+                navigate(
+                  isLogin
+                    ? `/dashboard${params.toString() ? `?${params.toString()}` : ""}`
+                    : `/signup/onboarding${location.search}`
+                )
+              }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -100,7 +123,12 @@ export function AuthForm() {
                     Forgot password?
                   </a>
                 </div>
-                <Input id="password" type="password" required className="h-8 text-sm" />
+                <Input
+                  id="password"
+                  type="password"
+                  required
+                  className="h-8 text-sm"
+                />
               </div>
               <Button type="submit" className="h-8 w-full text-sm">
                 {isLogin ? "Login" : "Sign up"}
@@ -123,11 +151,17 @@ export function AuthForm() {
         <div className="text-center text-xs text-muted-foreground">
           By clicking continue, you agree to <br className="hidden sm:block" />
           our{" "}
-          <a href="#" className="underline underline-offset-4 hover:text-primary">
+          <a
+            href="#"
+            className="underline underline-offset-4 hover:text-primary"
+          >
             Terms of Service
           </a>{" "}
           and{" "}
-          <a href="#" className="underline underline-offset-4 hover:text-primary">
+          <a
+            href="#"
+            className="underline underline-offset-4 hover:text-primary"
+          >
             Privacy Policy
           </a>
           .

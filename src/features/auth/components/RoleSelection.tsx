@@ -26,22 +26,17 @@ export function RoleSelection() {
   const [selectedRole, setSelectedRole] = useState<Role | null>(null)
   const navigate = useNavigate()
 
-  const continueToSignIn = () => {
-    if (selectedRole) {
-      navigate(`/signin?role=${selectedRole}`)
-    }
-  }
-
   const continueToSignup = () => {
     if (selectedRole) {
+      window.localStorage.setItem("baylan-role", selectedRole)
       navigate(`/signup?role=${selectedRole}`)
     }
   }
 
   return (
-    <main className="flex min-h-svh w-full items-center justify-center bg-[#171717] px-6 py-12 text-white">
-      <div className="flex w-full max-w-[533px] flex-col items-center">
-        <img src={logo} alt="Unite" className="mb-[54px] h-auto w-[155px]" />
+    <main className="flex min-h-svh w-full items-center justify-center overflow-hidden bg-[#171717] px-6 py-6 text-white">
+      <div className="flex w-full max-w-[500px] flex-col items-center">
+        <img src={logo} alt="Unite" className="mb-6 h-14 w-auto" />
 
         <div className="mb-6 text-center">
           <h1 className="mb-1 text-[21px] font-semibold tracking-[-0.02em] text-white">
@@ -62,8 +57,11 @@ export function RoleSelection() {
                 key={role.id}
                 type="button"
                 aria-pressed={isSelected}
-                onClick={() => setSelectedRole(role.id)}
-                className={`flex h-[326px] flex-col rounded-[14px] border bg-[#0d0d0d] p-6 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff3a3a] ${
+                onClick={() => {
+                  window.localStorage.setItem("baylan-role", role.id)
+                  navigate(`/signin?role=${role.id}`)
+                }}
+                className={`flex h-[260px] flex-col rounded-xl border bg-[#0d0d0d] p-5 text-left transition-colors focus-visible:ring-2 focus-visible:ring-[#ff3a3a] focus-visible:outline-none ${
                   isSelected
                     ? "border-[#ff3a3a]"
                     : "border-[#3b3b3b] hover:border-[#686868]"
@@ -73,11 +71,11 @@ export function RoleSelection() {
                   <img
                     src={role.image}
                     alt=""
-                    className="h-[126px] w-auto object-contain"
+                    className="h-24 w-auto object-contain"
                   />
                 </div>
                 <div>
-                  <h2 className="mb-1 text-[19px] font-semibold text-[#e8e8e8]">
+                  <h2 className="mb-1 text-lg font-semibold text-[#e8e8e8]">
                     {role.name}
                   </h2>
                   <p className="flex items-center gap-2 text-[14px] text-[#999999]">
@@ -89,15 +87,6 @@ export function RoleSelection() {
             )
           })}
         </div>
-
-        <button
-          type="button"
-          disabled={!selectedRole}
-          onClick={continueToSignIn}
-          className="h-9 w-full rounded-[9px] bg-[#eeeeee] text-[14px] font-medium text-[#171717] transition-opacity hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          Continue
-        </button>
 
         <p className="mt-3 text-[14px] text-[#999999]">
           Don&apos;t have an account?{" "}
@@ -111,10 +100,18 @@ export function RoleSelection() {
           </button>
         </p>
 
-        <p className="mt-[47px] text-center text-[12px] leading-[17px] text-[#999999]">
+        <p className="mt-6 text-center text-xs leading-relaxed text-[#999999]">
           By clicking continue, you agree to
           <br />
-          our <a href="#" className="underline underline-offset-2">Terms of Service</a> and <a href="#" className="underline underline-offset-2">Privacy Policy</a>.
+          our{" "}
+          <a href="#" className="underline underline-offset-2">
+            Terms of Service
+          </a>{" "}
+          and{" "}
+          <a href="#" className="underline underline-offset-2">
+            Privacy Policy
+          </a>
+          .
         </p>
       </div>
     </main>

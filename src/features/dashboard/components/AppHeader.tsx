@@ -1,9 +1,24 @@
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bell, PlusCircle, Moon, Sun, Droplet, UserPlus, Check } from "lucide-react"
+import {
+  Bell,
+  PlusCircle,
+  Moon,
+  Sun,
+  Droplet,
+  UserPlus,
+  Check,
+} from "lucide-react"
 import {
   Popover,
   PopoverContent,
@@ -19,101 +34,155 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useTheme } from "@/components/theme-provider"
 import { useLocation } from "react-router-dom"
+import { Fragment } from "react"
 
 export function AppHeader() {
   const { theme, setTheme } = useTheme()
   const location = useLocation()
-  const isCampaignPage = location.pathname.startsWith('/dashboard/campaigns')
-  const isPrescriptionPage = location.pathname === '/dashboard/prescriptions'
+  const breadcrumbs = (() => {
+    const path = location.pathname
+
+    if (path === "/dashboard/prescriptions") {
+      return { section: "Clinical Operations", items: ["Prescriptions"] }
+    }
+    if (path === "/dashboard/analytics") {
+      return { section: "Clinical Operations", items: ["Analytics"] }
+    }
+    if (path === "/dashboard/appointments") {
+      return { section: "Clinical Operations", items: ["Appointments"] }
+    }
+    if (path === "/dashboard/inventory") {
+      return { section: "Clinical Operations", items: ["Inventory"] }
+    }
+    if (path === "/dashboard/calendar") {
+      return { section: "Clinical Operations", items: ["Calendar"] }
+    }
+    if (path === "/dashboard/team") {
+      return {
+        section: "Practice Management",
+        items: ["Team", "Team Management"],
+      }
+    }
+    if (path === "/dashboard/settings") {
+      return { section: "Practice Management", items: ["Settings"] }
+    }
+    if (path.startsWith("/dashboard/campaigns")) {
+      return {
+        section: "Core Operations",
+        items: [
+          "Campaigns",
+          path.includes("review") ? "Campaign Review" : "Campaign List",
+        ],
+      }
+    }
+    if (path === "/dashboard/master-availability") {
+      return {
+        section: "Practice Management",
+        items: ["Master Availability"],
+      }
+    }
+
+    return { section: "Core Operations", items: ["Dashboard"] }
+  })()
 
   return (
-    <header className="bg-white dark:bg-black flex h-14 shrink-0 items-center justify-between border-b border-sidebar-border px-4">
+    <header className="flex h-14 shrink-0 items-center justify-between border-b border-sidebar-border bg-white px-4 dark:bg-black">
       {/* --- DESKTOP LAYOUT --- */}
-      <div className="hidden md:flex flex-1 items-center gap-2">
+      <div className="hidden flex-1 items-center gap-2 md:flex">
         <SidebarTrigger className="-ml-1" />
         <div className="h-4 w-px bg-border" />
         <Breadcrumb>
           <BreadcrumbList className="text-xs">
             <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">{isPrescriptionPage ? "Clinical Operations" : "Core Operations"}</BreadcrumbLink>
+              <BreadcrumbLink href="/dashboard">
+                {breadcrumbs.section}
+              </BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
-            {isPrescriptionPage ? (
-              <>
-                <BreadcrumbItem><BreadcrumbPage className="text-xs">Prescriptions</BreadcrumbPage></BreadcrumbItem>
-              </>
-            ) : isCampaignPage ? (
-              <>
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/dashboard/campaigns">Campaigns</BreadcrumbLink>
-                </BreadcrumbItem>
+            {breadcrumbs.items.map((item) => (
+              <Fragment key={item}>
                 <BreadcrumbSeparator />
                 <BreadcrumbItem>
                   <BreadcrumbPage className="text-xs font-normal">
-                    {location.pathname.includes('review') ? 'Campaign Review' : 'Campaign List'}
+                    {item}
                   </BreadcrumbPage>
                 </BreadcrumbItem>
-              </>
-            ) : (
-              <BreadcrumbItem>
-                <BreadcrumbPage className="text-xs">Dashboard</BreadcrumbPage>
-              </BreadcrumbItem>
-            )}
+              </Fragment>
+            ))}
           </BreadcrumbList>
         </Breadcrumb>
       </div>
 
-      <div className="hidden md:flex items-center gap-2">
-        <div className="flex items-center cursor-pointer hover:text-foreground transition-colors text-xs font-medium text-muted-foreground">
-          Search for campaigns, teams...
-        </div>
-        
-        <div className="h-4 w-px bg-border" />
-
+      <div className="hidden items-center gap-2 md:flex">
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8 relative">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative h-8 w-8 text-muted-foreground hover:text-foreground"
+            >
               <Bell className="size-4" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent align="end" className="w-[calc(100vw-2rem)] sm:w-[380px] pt-4 px-4 pb-0 flex flex-col gap-4 rounded-xl border-border shadow-lg">
+          <PopoverContent
+            align="end"
+            className="flex w-[calc(100vw-2rem)] flex-col gap-4 rounded-xl border-border px-4 pt-4 pb-0 shadow-lg sm:w-[380px]"
+          >
             <div className="flex items-center justify-between">
-              <span className="text-sm font-semibold text-foreground">Notifications (3)</span>
+              <span className="text-sm font-semibold text-foreground">
+                Notifications (3)
+              </span>
               <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-                <label htmlFor="unreads-desktop" className="cursor-pointer">Unreads (3)</label>
-                <Switch id="unreads-desktop" className="scale-75 origin-right" />
+                <label htmlFor="unreads-desktop" className="cursor-pointer">
+                  Unreads (3)
+                </label>
+                <Switch
+                  id="unreads-desktop"
+                  className="origin-right scale-75"
+                />
               </div>
             </div>
-            <div className="flex flex-col xl:flex-row items-stretch xl:items-center gap-2">
-              <Input placeholder="Filter Notifications" className="h-8 text-xs bg-background dark:bg-[#111]" />
-              <Button className="h-8 px-3 text-xs shrink-0 gap-1.5 bg-foreground text-background hover:bg-foreground/90 dark:bg-white dark:text-black">
+            <div className="flex flex-col items-stretch gap-2 xl:flex-row xl:items-center">
+              <Input
+                placeholder="Filter Notifications"
+                className="h-8 bg-background text-xs dark:bg-[#111]"
+              />
+              <Button className="h-8 shrink-0 gap-1.5 bg-foreground px-3 text-xs text-background hover:bg-foreground/90 dark:bg-white dark:text-black">
                 <Check className="h-3.5 w-3.5" />
                 Mark all as read
               </Button>
             </div>
-            <div className="border-t border-border py-4 flex flex-col gap-2 -mx-4 px-4 mt-2">
+            <div className="-mx-4 mt-2 flex flex-col gap-2 border-t border-border px-4 py-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Avatar className="h-6 w-6">
-                    <AvatarImage src="https://github.com/shadcn.png" alt="Joseph" />
+                    <AvatarImage
+                      src="https://github.com/shadcn.png"
+                      alt="Joseph"
+                    />
                     <AvatarFallback>JP</AvatarFallback>
                   </Avatar>
-                  <span className="text-xs font-medium text-foreground">Joseph Angelo Petalio</span>
+                  <span className="text-xs font-medium text-foreground">
+                    Joseph Angelo Petalio
+                  </span>
                 </div>
-                <span className="text-[10px] text-muted-foreground">09:34 AM</span>
+                <span className="text-[10px] text-muted-foreground">
+                  09:34 AM
+                </span>
               </div>
-              <p className="text-xs text-foreground">Requested your approval for the campaign Community Advocacy.</p>
+              <p className="text-xs text-foreground">
+                Requested your approval for the campaign Community Advocacy.
+              </p>
             </div>
           </PopoverContent>
         </Popover>
-        <Button 
-          variant="ghost" 
-          size="icon" 
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="text-muted-foreground hover:text-foreground h-8 w-8 relative"
+          className="relative h-8 w-8 text-muted-foreground hover:text-foreground"
         >
-          <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          <Sun className="h-4 w-4 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+          <Moon className="absolute h-4 w-4 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
           <span className="sr-only">Toggle theme</span>
         </Button>
 
@@ -126,17 +195,22 @@ export function AppHeader() {
               <span>Quick Create</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56 rounded-xl border-border shadow-md">
-            <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">Quick Create</DropdownMenuLabel>
-            <DropdownMenuItem className="gap-2 cursor-pointer rounded-md">
+          <DropdownMenuContent
+            align="end"
+            className="w-56 rounded-xl border-border shadow-md"
+          >
+            <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">
+              Quick Create
+            </DropdownMenuLabel>
+            <DropdownMenuItem className="cursor-pointer gap-2 rounded-md">
               <PlusCircle className="h-4 w-4" />
               <span>Create Campaign</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="gap-2 cursor-pointer rounded-md">
+            <DropdownMenuItem className="cursor-pointer gap-2 rounded-md">
               <Droplet className="h-4 w-4" />
               <span>Log Donations</span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="gap-2 cursor-pointer rounded-md">
+            <DropdownMenuItem className="cursor-pointer gap-2 rounded-md">
               <UserPlus className="h-4 w-4" />
               <span>Invite Team Member</span>
             </DropdownMenuItem>
@@ -145,67 +219,88 @@ export function AppHeader() {
       </div>
 
       {/* --- MOBILE LAYOUT --- */}
-      <div className="flex md:hidden w-full items-center justify-between">
+      <div className="flex w-full items-center justify-between md:hidden">
         <Breadcrumb>
           <BreadcrumbList className="text-xs">
-            {isCampaignPage ? (
-              <BreadcrumbItem>
-                <BreadcrumbPage className="text-xs font-normal">
-                  {location.pathname.includes('review') ? 'Campaign Review' : 'Campaign List'}
-                </BreadcrumbPage>
-              </BreadcrumbItem>
-            ) : (
-              <BreadcrumbItem>
-                <BreadcrumbPage className="text-xs font-normal">Dashboard</BreadcrumbPage>
-              </BreadcrumbItem>
-            )}
+            <BreadcrumbItem>
+              <BreadcrumbPage className="text-xs font-normal">
+                {breadcrumbs.items[breadcrumbs.items.length - 1]}
+              </BreadcrumbPage>
+            </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
         <div className="flex items-center gap-1">
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8 relative">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative h-8 w-8 text-muted-foreground hover:text-foreground"
+              >
                 <Bell className="size-4" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent align="center" collisionPadding={0} className="w-screen sm:w-[380px] pt-4 px-4 pb-0 flex flex-col gap-4 rounded-xl border-border shadow-lg">
+            <PopoverContent
+              align="center"
+              collisionPadding={0}
+              className="flex w-screen flex-col gap-4 rounded-xl border-border px-4 pt-4 pb-0 shadow-lg sm:w-[380px]"
+            >
               <div className="flex items-center justify-between">
-                <span className="text-sm font-semibold text-foreground">Notifications (3)</span>
+                <span className="text-sm font-semibold text-foreground">
+                  Notifications (3)
+                </span>
                 <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-                  <label htmlFor="unreads-mobile" className="cursor-pointer">Unreads (3)</label>
-                  <Switch id="unreads-mobile" className="scale-75 origin-right" />
+                  <label htmlFor="unreads-mobile" className="cursor-pointer">
+                    Unreads (3)
+                  </label>
+                  <Switch
+                    id="unreads-mobile"
+                    className="origin-right scale-75"
+                  />
                 </div>
               </div>
-              <div className="flex flex-col xl:flex-row items-stretch xl:items-center gap-2">
-                <Input placeholder="Filter Notifications" className="h-8 text-xs bg-background dark:bg-[#111]" />
-                <Button className="h-8 px-3 text-xs shrink-0 gap-1.5 bg-foreground text-background hover:bg-foreground/90 dark:bg-white dark:text-black">
+              <div className="flex flex-col items-stretch gap-2 xl:flex-row xl:items-center">
+                <Input
+                  placeholder="Filter Notifications"
+                  className="h-8 bg-background text-xs dark:bg-[#111]"
+                />
+                <Button className="h-8 shrink-0 gap-1.5 bg-foreground px-3 text-xs text-background hover:bg-foreground/90 dark:bg-white dark:text-black">
                   <Check className="h-3.5 w-3.5" />
                   Mark all as read
                 </Button>
               </div>
-              <div className="border-t border-border py-4 flex flex-col gap-2 -mx-4 px-4 mt-2">
+              <div className="-mx-4 mt-2 flex flex-col gap-2 border-t border-border px-4 py-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Avatar className="h-6 w-6">
-                      <AvatarImage src="https://github.com/shadcn.png" alt="Joseph" />
+                      <AvatarImage
+                        src="https://github.com/shadcn.png"
+                        alt="Joseph"
+                      />
                       <AvatarFallback>JP</AvatarFallback>
                     </Avatar>
-                    <span className="text-xs font-medium text-foreground">Joseph Angelo Petalio</span>
+                    <span className="text-xs font-medium text-foreground">
+                      Joseph Angelo Petalio
+                    </span>
                   </div>
-                  <span className="text-[10px] text-muted-foreground">09:34 AM</span>
+                  <span className="text-[10px] text-muted-foreground">
+                    09:34 AM
+                  </span>
                 </div>
-                <p className="text-xs text-foreground">Requested your approval for the campaign Community Advocacy.</p>
+                <p className="text-xs text-foreground">
+                  Requested your approval for the campaign Community Advocacy.
+                </p>
               </div>
             </PopoverContent>
           </Popover>
-          <Button 
-            variant="ghost" 
-            size="icon" 
+          <Button
+            variant="ghost"
+            size="icon"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="text-muted-foreground hover:text-foreground h-8 w-8 relative"
+            className="relative h-8 w-8 text-muted-foreground hover:text-foreground"
           >
-            <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <Sun className="h-4 w-4 scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+            <Moon className="absolute h-4 w-4 scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
             <span className="sr-only">Toggle theme</span>
           </Button>
           <SidebarTrigger className="-mr-1" />
