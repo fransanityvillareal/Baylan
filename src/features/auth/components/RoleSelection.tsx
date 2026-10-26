@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { Pill, Stethoscope } from "lucide-react"
-import logo from "@/assets/Header.svg"
+import { BrandLogo } from "@/components/BrandLogo"
 
 type Role = "doctor" | "pharmacist"
 
@@ -36,7 +36,7 @@ export function RoleSelection() {
   return (
     <main className="flex min-h-svh w-full items-center justify-center overflow-hidden bg-[#171717] px-6 py-6 text-white">
       <div className="flex w-full max-w-[500px] flex-col items-center">
-        <img src={logo} alt="Unite" className="mb-6 h-14 w-auto" />
+        <BrandLogo className="mb-6" />
 
         <div className="mb-6 text-center">
           <h1 className="mb-1 text-[21px] font-semibold tracking-[-0.02em] text-white">

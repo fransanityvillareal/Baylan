@@ -42,8 +42,6 @@ import {
   UsersRound,
   ChevronsUpDown,
 } from "lucide-react"
-import headerIcon from "@/assets/Icon.svg"
-import bmcLogo from "@/assets/Bicol Medical Center Logo.png"
 
 export function AppSidebar() {
   const navigate = useNavigate()
@@ -66,21 +64,20 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="flex flex-col p-0">
-        <div className="flex h-14 items-center gap-2 border-b border-sidebar-border px-4 transition-all duration-200 ease-linear group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:px-0">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-transparent transition-all duration-200 ease-linear">
+        <div className="flex h-14 items-center gap-2.5 border-b border-sidebar-border px-4 transition-all duration-200 ease-linear group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:px-0">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-[6px] bg-transparent transition-all duration-200 ease-linear">
             <img
-              src={headerIcon}
+              src="/baylan-logo.svg"
               alt="Baylan Logo"
               className="h-full w-full object-contain"
             />
           </div>
           <div className="flex max-w-[250px] flex-col overflow-hidden transition-all duration-200 ease-linear group-data-[collapsible=icon]:max-w-0 group-data-[collapsible=icon]:opacity-0">
-            <span
-              className="text-xl font-semibold tracking-tight whitespace-nowrap text-[#FF3B30]"
-              style={{ fontFamily: "'Poppins', sans-serif" }}
-            >
-              baylan
-            </span>
+            <img
+              src="/baylan-text.svg"
+              alt="Baylan"
+              className="baylan-wordmark h-15 w-auto whitespace-nowrap"
+            />
           </div>
         </div>
         <div className="px-4 pt-2 pb-2 transition-all duration-200 ease-linear group-data-[collapsible=icon]:px-0">
@@ -93,17 +90,11 @@ export function AppSidebar() {
                   alt="Mercury Drug"
                   className="h-full w-full object-contain p-0.5"
                 />
-              ) : (
-                <img
-                  src={bmcLogo}
-                  alt="Bicol Medical Center"
-                  className="h-full w-full object-contain p-0.5"
-                />
-              )}
+              ) : null}
             </div>
             <div className="flex max-w-[250px] flex-1 flex-col overflow-hidden text-left whitespace-nowrap transition-all duration-200 ease-linear group-data-[collapsible=icon]:max-w-0 group-data-[collapsible=icon]:opacity-0">
               <span className="text-xs font-medium text-foreground">
-                {isPharmacist ? "Mercury Drug" : "Bicol Medical Center"}
+                {isPharmacist ? "Mercury Drug" : "St. Gabriel General Hospital"}
               </span>
               <span className="text-[10px] font-normal text-muted-foreground">
                 {isPharmacist ? "Pharmacy" : "Specialized Service"}

@@ -15,7 +15,7 @@ import {
   Search,
   ShoppingBag,
 } from "lucide-react"
-import logo from "@/assets/Header.svg"
+import { BrandLogo } from "@/components/BrandLogo"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -63,7 +63,7 @@ const medicines: Medicine[] = [
     category: "Pain Relief",
     price: 68,
     description: "For temporary relief of fever and minor aches.",
-    color: "bg-rose-100 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300",
+    color: "bg-primary/10 text-primary",
     image:
       "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=640&q=80",
   },
@@ -76,7 +76,7 @@ const medicines: Medicine[] = [
     category: "Antibiotics",
     price: 124,
     description: "Prescription medicine. Pharmacist verification required.",
-    color: "bg-sky-100 text-sky-600 dark:bg-sky-500/15 dark:text-sky-300",
+    color: "bg-primary/10 text-primary",
     image:
       "https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&w=640&q=80",
   },
@@ -90,7 +90,7 @@ const medicines: Medicine[] = [
     price: 52,
     description: "Once-daily relief from common allergy symptoms.",
     color:
-      "bg-violet-100 text-violet-600 dark:bg-violet-500/15 dark:text-violet-300",
+      "bg-primary/10 text-primary",
     image:
       "https://images.unsplash.com/photo-1550572017-edd951b55104?auto=format&fit=crop&w=640&q=80",
   },
@@ -104,7 +104,7 @@ const medicines: Medicine[] = [
     price: 1240,
     description: "Long-acting insulin. Keep refrigerated after pickup.",
     color:
-      "bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300",
+      "bg-primary/10 text-primary",
     image:
       "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=640&q=80",
   },
@@ -113,7 +113,7 @@ const medicines: Medicine[] = [
 const pharmacies: Pharmacy[] = [
   {
     id: "bmc-pharmacy",
-    name: "Bicol Medical Center Pharmacy",
+    name: "St. Gabriel General Hospital Pharmacy",
     distance: "0.8 km",
     eta: "Ready in 15–20 min",
     address: "Concepcion Pequeña, Naga City",
@@ -267,7 +267,7 @@ export function MportPage() {
       pin.style.height = "24px"
       pin.style.borderRadius = "50% 50% 50% 0"
       pin.style.transform = "rotate(-45deg)"
-      pin.style.background = isAvailable ? "#059669" : "#64748b"
+      pin.style.background = isAvailable ? "#ff3767" : "#64748b"
       pin.style.border = "2px solid white"
       pin.style.boxShadow = "0 2px 6px rgb(0 0 0 / 0.25)"
       markerElement.appendChild(pin)
@@ -279,7 +279,7 @@ export function MportPage() {
         label.style.padding = "2px 6px"
         label.style.borderRadius = "999px"
         label.style.background = "white"
-        label.style.color = "#14532d"
+        label.style.color = "#ff3767"
         label.style.font = "600 10px Inter, sans-serif"
         label.style.whiteSpace = "nowrap"
         label.style.boxShadow = "0 1px 4px rgb(0 0 0 / 0.2)"
@@ -312,25 +312,28 @@ export function MportPage() {
   }
 
   return (
-    <div className="min-h-svh bg-[#eef7f5] text-[#202124]">
-      <header className="sticky top-0 z-50 h-14 border-b border-border bg-[#0b0b0b] text-white shadow-sm">
+    <div className="min-h-svh bg-primary/5 text-foreground">
+      <header className="sticky top-0 z-50 h-14 border-b border-primary/20 bg-primary text-primary-foreground shadow-sm">
         <div className="mx-auto flex h-14 max-w-7xl items-center gap-4 px-4 md:px-6">
-          <img src={logo} alt="Baylan" className="h-8 w-auto" />
-          <div className="hidden items-center gap-2 border-l border-white/15 pl-4 text-xs text-white sm:flex">
+          <BrandLogo
+            iconClassName="h-8 w-8 rounded-[6px]"
+            textClassName="h-8 w-auto"
+          />
+          <div className="hidden items-center gap-2 border-l border-white/25 pl-4 text-xs text-primary-foreground sm:flex">
             <MapPin className="h-3.5 w-3.5" />
             <span className="font-medium">New address</span>
-            <span className="text-white/60">Naga City</span>
+            <span className="text-primary-foreground/70">Naga City</span>
             <ChevronRight className="h-3.5 w-3.5" />
           </div>
           <div className="ml-auto flex items-center gap-2">
-            <div className="hidden items-center gap-1.5 rounded-md bg-white/10 px-2.5 py-1.5 text-xs text-white md:flex">
+            <div className="hidden items-center gap-1.5 rounded-md bg-white/15 px-2.5 py-1.5 text-xs text-primary-foreground md:flex">
               <Clock3 className="h-3.5 w-3.5" />
               <span>Time Standard</span>
             </div>
             <a href="/signin" className="hidden sm:block">
               <Button
                 variant="outline"
-                className="h-8 border-white/20 bg-transparent px-4 text-xs text-white hover:bg-white/10 hover:text-white"
+                className="h-8 border-white/30 bg-transparent px-4 text-xs text-primary-foreground hover:bg-white/15 hover:text-primary-foreground"
               >
                 Log in
               </Button>

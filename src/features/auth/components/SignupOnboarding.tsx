@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
-import logo from "@/assets/Header.svg"
+import { BrandLogo } from "@/components/BrandLogo"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -89,7 +89,7 @@ export function SignupOnboarding() {
   return (
     <main className="flex min-h-svh w-full items-center justify-center bg-[#171717] px-6 py-12 text-white">
       <div className="flex w-full max-w-[581px] flex-col items-center">
-        <img src={logo} alt="Unite" className="mb-6 h-14 w-auto" />
+        <BrandLogo className="mb-6" />
 
         <Card className="w-full rounded-[13px] border border-[#3a3a3a] bg-transparent px-6 py-6 text-white ring-0 sm:px-6">
           <header className="mb-6 text-center">

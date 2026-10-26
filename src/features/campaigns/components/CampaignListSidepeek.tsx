@@ -172,7 +172,7 @@ export function CampaignListSidepeek({ campaign, onClose, onAction }: { campaign
                 <Building2 className="h-3.5 w-3.5" />
                 <span className="text-xs">Hosting Organization</span>
               </div>
-              <span className="text-xs text-foreground dark:text-white flex-1">Bicol Medical Center</span>
+              <span className="text-xs text-foreground dark:text-white flex-1">St. Gabriel General Hospital</span>
             </div>
             
             <div className="flex items-center">

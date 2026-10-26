@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import headerImage from "@/assets/Header.svg"
+import { BrandLogo } from "@/components/BrandLogo"
 
 export function AuthForm() {
   const location = useLocation()
@@ -29,7 +29,7 @@ export function AuthForm() {
       <div className="flex w-full max-w-sm flex-col items-center gap-6">
         {/* Logo */}
         <div className="mb-4 flex items-center justify-center">
-          <img src={headerImage} alt="Header Logo" className="h-14 w-auto" />
+          <BrandLogo />
         </div>
 
         {/* Form Card */}
