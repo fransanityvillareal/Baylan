@@ -5,6 +5,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import "./index.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { AuthForm } from "@/features/auth/components/AuthForm"
+import { RoleSelection } from "@/features/auth/components/RoleSelection"
+import { SignupOnboarding } from "@/features/auth/components/SignupOnboarding"
 import { DashboardLayout } from "@/features/dashboard/components/DashboardLayout"
 import { DashboardPage } from "@/features/dashboard/components/DashboardPage"
 import { CampaignReviewPage } from "@/features/campaigns/components/CampaignReviewPage"
@@ -20,7 +22,9 @@ createRoot(document.getElementById("root")!).render(
       <BrowserRouter>
         <Routes>
           {/* Auth Route */}
-          <Route path="/" element={<AuthForm />} />
+          <Route path="/" element={<RoleSelection />} />
+          <Route path="/signin" element={<AuthForm />} />
+          <Route path="/signup" element={<SignupOnboarding />} />
           
           {/* Dashboard Routes */}
           <Route path="/dashboard" element={<DashboardLayout />}>

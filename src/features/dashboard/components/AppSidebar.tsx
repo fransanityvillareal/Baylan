@@ -42,11 +42,11 @@ export function AppSidebar() {
       <SidebarHeader className="flex flex-col p-0">
         <div className="flex h-14 items-center px-4 gap-2 border-b border-sidebar-border transition-all duration-200 ease-linear group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 group-data-[collapsible=icon]:gap-0">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-transparent overflow-hidden transition-all duration-200 ease-linear">
-            <img src={headerIcon} alt="Unite Logo" className="h-full w-full object-contain" />
+            <img src={headerIcon} alt="Baylan Logo" className="h-full w-full object-contain" />
           </div>
           <div className="flex flex-col overflow-hidden transition-all duration-200 ease-linear max-w-[250px] group-data-[collapsible=icon]:max-w-0 group-data-[collapsible=icon]:opacity-0">
             <span className="text-xl font-semibold text-[#FF3B30] tracking-tight whitespace-nowrap" style={{ fontFamily: "'Poppins', sans-serif" }}>
-              unite
+              baylan
             </span>
           </div>
         </div>
