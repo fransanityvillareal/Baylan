@@ -16,7 +16,6 @@ import {
 import { format } from "date-fns"
 import { ExportCalendarModal } from "./ExportCalendarModal"
 import { CheckAvailabilityModal } from "./CheckAvailabilityModal"
-import { CreateCampaignModal } from "@/features/campaigns/components/CreateCampaignModal"
 export interface CustomToolbarProps {
   date: Date
   view: string
@@ -77,12 +76,6 @@ export function CustomToolbar(props: CustomToolbarProps) {
             </TabsList>
           </Tabs>
           
-          <CreateCampaignModal>
-            <Button className="w-full md:w-auto h-8 px-2 text-xs font-medium gap-2 bg-primary text-primary-foreground dark:bg-white dark:text-black hover:bg-zinc-200">
-              <PlusCircle className="h-3.5 w-3.5" />
-              Create Campaign
-            </Button>
-          </CreateCampaignModal>
         </div>
       </div>
 

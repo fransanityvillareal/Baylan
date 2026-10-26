@@ -42,7 +42,6 @@ import { Badge } from "@/components/ui/badge"
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 
-import { CreateCampaignModal } from "./CreateCampaignModal"
 import { EditCampaignModal } from "./EditCampaignModal"
 import { DeleteCampaignModal } from "./DeleteCampaignModal"
 import { CancelCampaignModal } from "./CancelCampaignModal"
@@ -182,12 +181,6 @@ export function CampaignListPage() {
                 <RefreshCw className="h-3.5 w-3.5" />
                 Refresh
               </Button>
-              <CreateCampaignModal>
-                <Button className="w-full md:w-auto h-8 px-2 text-xs font-medium gap-2 bg-primary text-primary-foreground dark:bg-white dark:text-black hover:bg-zinc-200">
-                  <PlusCircle className="h-3.5 w-3.5" />
-                  Create Campaign
-                </Button>
-              </CreateCampaignModal>
             </div>
           </div>
 

@@ -12,7 +12,6 @@ import { DashboardLayout } from "@/features/dashboard/components/DashboardLayout
 import { CampaignReviewPage } from "@/features/campaigns/components/CampaignReviewPage"
 import { CampaignListPage } from "@/features/campaigns/components/CampaignListPage"
 import { CalendarPage } from "@/features/calendar/components/CalendarPage"
-import { MasterAvailabilityPage } from "@/features/master-availability/components/MasterAvailabilityPage"
 import { TeamManagementPage } from "@/features/team/components/TeamManagementPage"
 import { PrescriptionsPage } from "@/features/prescriptions/components/PrescriptionsPage"
 import { AnalyticsPage } from "@/features/analytics/components/AnalyticsPage"
@@ -64,10 +63,6 @@ createRoot(document.getElementById("root")!).render(
             <Route path="inventory" element={<PharmacistOnlyPage><InventoryPage /></PharmacistOnlyPage>} />
             <Route path="point-of-sale" element={<PharmacistOnlyPage><PointOfSalePage /></PharmacistOnlyPage>} />
             <Route path="orders" element={<PharmacistOnlyPage><OrdersPage /></PharmacistOnlyPage>} />
-            <Route
-              path="master-availability"
-              element={<MasterAvailabilityPage />}
-            />
             <Route path="team" element={<TeamManagementPage />} />
             <Route path="settings" element={<EmptyPage />} />
             <Route path="feedback" element={<EmptyPage />} />

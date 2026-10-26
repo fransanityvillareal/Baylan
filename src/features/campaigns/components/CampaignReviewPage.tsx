@@ -9,7 +9,6 @@ import { Sheet, SheetContent } from "@/components/ui/sheet"
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { ExportCampaignModal } from "./ExportCampaignModal"
-import { CreateCampaignModal } from "./CreateCampaignModal"
 import { EditCampaignModal } from "./EditCampaignModal"
 import { CampaignSidepeek } from "./CampaignSidepeek"
 import { DeleteCampaignModal } from "./DeleteCampaignModal"
@@ -190,12 +189,6 @@ export function CampaignReviewPage() {
               <RefreshCw className="h-3.5 w-3.5" />
               Refresh
             </Button>
-            <CreateCampaignModal>
-              <Button className="w-full md:w-auto h-8 px-2 text-xs font-medium gap-2 bg-primary text-primary-foreground dark:bg-white dark:text-black hover:bg-zinc-200">
-                <PlusCircle className="h-3.5 w-3.5" />
-                Create Campaign
-              </Button>
-            </CreateCampaignModal>
           </div>
         </div>
 

@@ -81,13 +81,6 @@ export function AppHeader() {
         ],
       }
     }
-    if (path === "/dashboard/master-availability") {
-      return {
-        section: "Practice Management",
-        items: ["Master Availability"],
-      }
-    }
-
     return { section: "Clinical Operations", items: ["Prescriptions"] }
   })()
 

@@ -14,7 +14,6 @@ import enUS from "date-fns/locale/en-US"
 import { CustomToolbar } from "./CustomToolbar"
 import { CustomEvent } from "./CustomEvent"
 import { WeeklyScheduleView } from "./WeeklyScheduleView"
-import { CreateCampaignModal } from "@/features/campaigns/components/CreateCampaignModal"
 import { CampaignListSidepeek } from "@/features/campaigns/components/CampaignListSidepeek"
 import { Calendar as CalendarIcon, CalendarOff } from "lucide-react"
 
@@ -48,7 +47,6 @@ export function CalendarPage() {
   }, [isMobile])
 
   const [view, setView] = useState<any>('month')
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null)
 
   // Swipe gesture handling
@@ -204,12 +202,6 @@ export function CalendarPage() {
   const handleSelectSlot = (slotInfo: any) => {
     setSelectedDate(slotInfo.start)
     setViewDate(slotInfo.start)
-    const day = slotInfo.start.getDay()
-    // On desktop, clicking a weekday opens the create modal. 
-    // On mobile, it just selects the date to show events below.
-    if (!isMobileRef.current && day !== 0 && day !== 6) {
-      setIsCreateModalOpen(true)
-    }
   }
 
   const handleSelectEvent = (event: AppEvent) => {
@@ -308,8 +300,6 @@ export function CalendarPage() {
           </div>
         </div>
       )}
-
-      <CreateCampaignModal open={isCreateModalOpen} onOpenChange={setIsCreateModalOpen} />
 
       {/* Desktop Floating Sidepeek Overlay */}
       {!isMobile && (
