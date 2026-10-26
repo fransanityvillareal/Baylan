@@ -145,7 +145,7 @@ export function SignupOnboarding() {
               <Button
                 type="button"
                 disabled={!declarationAccepted || !addressValid}
-                onClick={() => navigate(`/signin?role=${role}`)}
+                onClick={() => navigate(`/dashboard/prescriptions?role=${role}`)}
                 className="h-9 rounded-[9px] bg-[#eeeeee] text-[14px] font-medium text-[#171717] hover:bg-white disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Finish

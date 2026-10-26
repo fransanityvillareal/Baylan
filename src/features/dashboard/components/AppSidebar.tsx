@@ -13,13 +13,12 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarMenuSubButton,
-  SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { ChevronRight, LayoutGrid, LineChart, Target, Calendar, CalendarCheck, Users, SlidersHorizontal, Send, ChevronsUpDown } from "lucide-react"
+import { ChevronRight, LayoutGrid, LineChart, Target, Calendar, CalendarCheck, Users, SlidersHorizontal, Send, ChevronsUpDown, FileText } from "lucide-react"
 import headerIcon from "@/assets/icon.svg"
 import bmcLogo from "@/assets/Bicol Medical Center Logo.png"
 
@@ -88,6 +87,15 @@ export function AppSidebar() {
                 >
                   <LineChart className="mr-2" />
                   <span>Analytics</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  isActive={location.pathname === '/dashboard/prescriptions'}
+                  onClick={() => handleNavigate('/dashboard/prescriptions')}
+                >
+                  <FileText className="mr-2" />
+                  <span>Prescriptions</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 

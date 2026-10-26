@@ -1,10 +1,9 @@
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { Separator } from "@/components/ui/separator"
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Bell, Search, PlusCircle, Moon, Sun, Droplet, UserPlus, Check } from "lucide-react"
+import { Bell, PlusCircle, Moon, Sun, Droplet, UserPlus, Check } from "lucide-react"
 import {
   Popover,
   PopoverContent,
@@ -25,6 +24,7 @@ export function AppHeader() {
   const { theme, setTheme } = useTheme()
   const location = useLocation()
   const isCampaignPage = location.pathname.startsWith('/dashboard/campaigns')
+  const isPrescriptionPage = location.pathname === '/dashboard/prescriptions'
 
   return (
     <header className="bg-white dark:bg-black flex h-14 shrink-0 items-center justify-between border-b border-sidebar-border px-4">
@@ -35,10 +35,14 @@ export function AppHeader() {
         <Breadcrumb>
           <BreadcrumbList className="text-xs">
             <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">Core Operations</BreadcrumbLink>
+              <BreadcrumbLink href="/dashboard">{isPrescriptionPage ? "Clinical Operations" : "Core Operations"}</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
-            {isCampaignPage ? (
+            {isPrescriptionPage ? (
+              <>
+                <BreadcrumbItem><BreadcrumbPage className="text-xs">Prescriptions</BreadcrumbPage></BreadcrumbItem>
+              </>
+            ) : isCampaignPage ? (
               <>
                 <BreadcrumbItem>
                   <BreadcrumbLink href="/dashboard/campaigns">Campaigns</BreadcrumbLink>

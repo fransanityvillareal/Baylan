@@ -15,6 +15,7 @@ import { CalendarPage } from "@/features/calendar/components/CalendarPage"
 import { MasterAvailabilityPage } from "@/features/master-availability/components/MasterAvailabilityPage"
 import { TeamManagementPage } from "@/features/team/components/TeamManagementPage"
 import { AnalyticsPage } from "@/features/analytics/components/AnalyticsPage"
+import { PrescriptionsPage } from "@/features/prescriptions/components/PrescriptionsPage"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -29,6 +30,7 @@ createRoot(document.getElementById("root")!).render(
           {/* Dashboard Routes */}
           <Route path="/dashboard" element={<DashboardLayout />}>
             <Route index element={<DashboardPage />} />
+            <Route path="prescriptions" element={<PrescriptionsPage />} />
             <Route path="campaigns/review" element={<CampaignReviewPage />} />
             {/* Placeholder routes for navigation */}
             <Route path="analytics" element={<AnalyticsPage />} />
