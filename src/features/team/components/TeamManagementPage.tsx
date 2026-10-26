@@ -31,9 +31,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer"
-import { useIsMobile } from "@/hooks/use-mobile"
-import { TeamManagementSidepeek } from "./TeamManagementSidepeek"
 import { InviteTeamMemberModal } from "./InviteTeamMemberModal"
 
 const MOCK_STAFF = [
@@ -43,7 +40,6 @@ const MOCK_STAFF = [
     avatar: "https://i.pravatar.cc/150?u=1",
     status: "Active",
     position: "Administrator",
-    sector: "Local Government Unit",
     email: "japetallo@gmail.com"
   },
   {
@@ -51,8 +47,7 @@ const MOCK_STAFF = [
     name: "Maria Santos",
     avatar: "https://i.pravatar.cc/150?u=2",
     status: "Active",
-    position: "Manager",
-    sector: "NGO",
+    position: "Pharmacist",
     email: "msantos@example.com"
   },
   {
@@ -60,16 +55,13 @@ const MOCK_STAFF = [
     name: "Juan Dela Cruz",
     avatar: "https://i.pravatar.cc/150?u=3",
     status: "Pending",
-    position: "Staff",
-    sector: "Private Sector",
+    position: "Doctor",
     email: "juan@example.com"
   }
 ]
 
 export function TeamManagementPage() {
   const [activeTab, setActiveTab] = useState("all")
-  const [selectedStaff, setSelectedStaff] = useState<any>(null)
-  const isMobile = useIsMobile()
 
   // Swipe gesture handling
   const [touchStartPos, setTouchStartPos] = useState<{x: number, y: number} | null>(null)
@@ -133,8 +125,7 @@ export function TeamManagementPage() {
             <div className="flex w-full xl:w-auto flex-wrap items-center gap-2">
               <Input placeholder="Filter staff..." className="h-8 px-2 w-full sm:w-[250px] text-xs font-normal bg-background dark:bg-black border-sidebar-border" />
               {Object.entries({
-                "Role": ["Administrator", "Manager", "Coordinator", "Staff"],
-                "Sector": ["Local Government Unit", "NGO", "Private Sector", "Academe"]
+                "Role": ["Administrator", "Doctor", "Pharmacist"]
               }).map(([filterName, options]) => (
                 <Popover key={filterName}>
                   <PopoverTrigger asChild>
@@ -202,7 +193,6 @@ export function TeamManagementPage() {
                     <TableHead className="text-xs font-medium text-foreground dark:text-white whitespace-nowrap">Name</TableHead>
                     <TableHead className="text-xs font-medium text-foreground dark:text-white whitespace-nowrap">Status</TableHead>
                     <TableHead className="text-xs font-medium text-foreground dark:text-white whitespace-nowrap">Position</TableHead>
-                    <TableHead className="text-xs font-medium text-foreground dark:text-white whitespace-nowrap">Sector</TableHead>
                     <TableHead className="text-xs font-medium text-foreground dark:text-white whitespace-nowrap">Email</TableHead>
                     <TableHead className="w-12"></TableHead>
                   </TableRow>
@@ -211,8 +201,7 @@ export function TeamManagementPage() {
                   {MOCK_STAFF.map((staff) => (
                     <TableRow 
                       key={staff.id} 
-                      className={`border-sidebar-border cursor-pointer transition-colors group ${selectedStaff?.id === staff.id ? 'bg-accent dark:bg-white/10' : 'hover:bg-accent dark:hover:bg-white/5'}`}
-                      onClick={() => setSelectedStaff(staff)}
+                      className="border-sidebar-border transition-colors group hover:bg-accent dark:hover:bg-white/5"
                     >
                       <TableCell className="pl-4">
                         <Checkbox className="border-sidebar-border data-[state=checked]:bg-primary dark:data-[state=checked]:bg-white data-[state=checked]:text-primary-foreground dark:data-[state=checked]:text-black" />
@@ -244,9 +233,6 @@ export function TeamManagementPage() {
                         <div className="w-fit bg-muted dark:bg-[#222] px-1.5 py-0.5 rounded text-[10px] whitespace-nowrap">
                           {staff.position}
                         </div>
-                      </TableCell>
-                      <TableCell className="text-xs text-foreground dark:text-white whitespace-nowrap">
-                        {staff.sector}
                       </TableCell>
                       <TableCell className="text-xs text-foreground dark:text-white whitespace-nowrap">
                         {staff.email}
@@ -308,8 +294,7 @@ export function TeamManagementPage() {
             {MOCK_STAFF.map((staff) => (
               <div 
                 key={staff.id} 
-                className={`flex flex-col p-4 rounded-xl border border-sidebar-border bg-card dark:bg-[#111] gap-4 cursor-pointer transition-colors ${selectedStaff?.id === staff.id ? 'ring-1 ring-ring dark:ring-white/20' : 'hover:bg-accent dark:hover:bg-white/5'}`}
-                onClick={() => setSelectedStaff(staff)}
+                className="flex flex-col p-4 rounded-xl border border-sidebar-border bg-card dark:bg-[#111] gap-4 transition-colors hover:bg-accent dark:hover:bg-white/5"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-3">
@@ -341,10 +326,6 @@ export function TeamManagementPage() {
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">Sector</span>
-                    <span className="text-xs text-foreground dark:text-white text-right">{staff.sector}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">Email</span>
                     <span className="text-xs text-foreground dark:text-white text-right">{staff.email}</span>
                   </div>
@@ -370,26 +351,6 @@ export function TeamManagementPage() {
         </div>
       </div>
 
-      {/* Desktop Floating Sidepeek Overlay */}
-      {!isMobile && (
-        <div 
-          className={`fixed top-0 right-0 h-screen w-[100%] sm:w-[400px] z-50 transition-transform duration-300 ease-in-out shadow-2xl ${selectedStaff ? 'translate-x-0' : 'translate-x-full'}`}
-        >
-          <TeamManagementSidepeek staff={selectedStaff} onClose={() => setSelectedStaff(null)} />
-        </div>
-      )}
-
-      {/* Mobile Sidepeek Drawer (from underneath with drag-to-dismiss) */}
-      {isMobile && (
-        <Drawer open={!!selectedStaff} onOpenChange={(open) => !open && setSelectedStaff(null)}>
-          <DrawerContent className="p-0 bg-background dark:bg-background dark:bg-[#0a0a0a] border-t border-sidebar-border border-x-0 border-b-0 before:hidden rounded-t-xl overflow-hidden !h-[80dvh] flex flex-col focus-visible:outline-none">
-            <div className="sr-only">
-              <DrawerTitle>Staff Details</DrawerTitle>
-            </div>
-            <TeamManagementSidepeek staff={selectedStaff} onClose={() => setSelectedStaff(null)} />
-          </DrawerContent>
-        </Drawer>
-      )}
     </div>
   )
 }

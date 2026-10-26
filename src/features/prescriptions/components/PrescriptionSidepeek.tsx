@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react"
+import type { ReactNode } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -31,9 +32,11 @@ type Prescription = {
 export function PrescriptionSidepeek({
   prescription,
   onClose,
+  onPreviewPdf,
 }: {
   prescription: Prescription | null
   onClose: () => void
+  onPreviewPdf: () => void
 }) {
   const itemsTableRef = useRef<HTMLDivElement>(null)
 
@@ -81,7 +84,7 @@ export function PrescriptionSidepeek({
               <h3 className="text-xs font-medium">Prescription Summary</h3>
               <ClipboardList className="h-3.5 w-3.5 text-muted-foreground" />
             </div>
-            <Button variant="secondary" size="sm" className="h-7 gap-2 text-xs">
+            <Button variant="secondary" size="sm" className="h-7 gap-2 text-xs" onClick={onPreviewPdf}>
               <Printer className="size-3.5" />
               Print Rx
             </Button>
@@ -242,7 +245,7 @@ export function PrescriptionSidepeek({
         </section>
       </div>
       <div className="flex shrink-0 flex-col gap-3 border-t border-sidebar-border p-4 pb-8 md:pb-4">
-        <Button className="h-8 w-full bg-primary text-xs font-medium text-primary-foreground hover:bg-zinc-200 dark:bg-white dark:text-black">
+        <Button className="h-8 w-full bg-primary text-xs font-medium text-primary-foreground hover:bg-zinc-200 dark:bg-white dark:text-black" onClick={onPreviewPdf}>
           Print BMC Prescription Form
         </Button>
         <Button
@@ -261,7 +264,7 @@ function InfoRow({
   label,
   value,
 }: {
-  icon: React.ReactNode
+  icon: ReactNode
   label: string
   value: string
 }) {

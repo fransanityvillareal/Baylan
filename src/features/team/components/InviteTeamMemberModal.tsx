@@ -37,25 +37,12 @@ export function InviteTeamMemberModal({ children }: { children: React.ReactNode 
               </SelectTrigger>
               <SelectContent position="popper" side="bottom" className="bg-background dark:bg-[#0a0a0a] border-sidebar-border text-foreground dark:text-white">
                 <SelectItem value="admin" className="text-xs">Administrator</SelectItem>
-                <SelectItem value="manager" className="text-xs">Manager</SelectItem>
-                <SelectItem value="staff" className="text-xs">Staff</SelectItem>
+                <SelectItem value="doctor" className="text-xs">Doctor</SelectItem>
+                <SelectItem value="pharmacist" className="text-xs">Pharmacist</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="sector" className="text-xs font-medium text-foreground dark:text-white">Sector</Label>
-            <Select>
-              <SelectTrigger id="sector" className="!h-8 w-full bg-background dark:bg-[#0a0a0a] border-sidebar-border text-xs text-muted-foreground">
-                <SelectValue placeholder="Select sector" />
-              </SelectTrigger>
-              <SelectContent position="popper" side="bottom" className="bg-background dark:bg-[#0a0a0a] border-sidebar-border text-foreground dark:text-white">
-                <SelectItem value="lgu" className="text-xs">Local Government Unit</SelectItem>
-                <SelectItem value="ngo" className="text-xs">NGO</SelectItem>
-                <SelectItem value="private" className="text-xs">Private Sector</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
         </div>
         
         <div className="flex items-center gap-2 mt-4">

@@ -54,6 +54,7 @@ import { useIsMobile } from "@/hooks/use-mobile"
 import { PrescriptionSidepeek } from "./PrescriptionSidepeek"
 import { CreatePrescriptionModal } from "./CreatePrescriptionModal"
 import { ScanPrescriptionModal } from "./ScanPrescriptionModal"
+import { PrescriptionPdfPreview } from "./PrescriptionPdfPreview"
 import { DataExportModal } from "@/features/dashboard/components/DataExportModal"
 import { useSearchParams } from "react-router-dom"
 
@@ -96,6 +97,9 @@ export function PrescriptionsPage() {
   const [selectedPrescription, setSelectedPrescription] = useState<
     (typeof prescriptions)[number] | null
   >(null)
+  const [inlinePreviewPrescription, setInlinePreviewPrescription] = useState<
+    (typeof prescriptions)[number] | null
+  >(null)
   const [dateRange, setDateRange] = useState<DateRange | undefined>()
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     {}
@@ -124,6 +128,18 @@ export function PrescriptionsPage() {
   const clearFilter = (filterName: string) => {
     setActiveFilters((current) => ({ ...current, [filterName]: [] }))
   }
+  const handlePrescriptionFound = (code: string) => {
+    const matchingPrescription = prescriptions.find((item) => item.id === code)
+    const scannedPrescription = matchingPrescription ?? {
+      id: code,
+      patient: "Scanned Patient",
+      items: 2,
+      unavailable: 0,
+      issued: "Oct 13, 2026 - 10:45 AM",
+    }
+    setSelectedPrescription(scannedPrescription)
+    setInlinePreviewPrescription(scannedPrescription)
+  }
   const toggleAll = (checked: boolean) =>
     setSelected(checked ? prescriptions.map((item) => item.id) : [])
   const toggleOne = (id: string, checked: boolean) =>
@@ -134,6 +150,7 @@ export function PrescriptionsPage() {
   return (
     <div className="relative flex h-full w-full items-start overflow-hidden bg-background dark:bg-black">
       <div className="flex h-full w-full min-w-0 flex-col overflow-y-auto text-foreground">
+        {!inlinePreviewPrescription && (
         <div className="sticky top-0 z-10 flex flex-col gap-4 bg-background p-4 pr-4 pb-4 pl-3 dark:bg-black">
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <div className="flex w-full items-center justify-between gap-4 md:w-auto md:justify-start">
@@ -165,7 +182,7 @@ export function PrescriptionsPage() {
             </div>
             <div className="flex w-full flex-col gap-2 sm:flex-row md:w-auto">
               {isPharmacist && (
-                <ScanPrescriptionModal>
+                <ScanPrescriptionModal onPrescriptionFound={handlePrescriptionFound}>
                   <Button
                     variant="outline"
                     className="h-8 w-full gap-2 px-2 text-xs font-medium sm:w-auto"
@@ -350,7 +367,16 @@ export function PrescriptionsPage() {
             <PrescriptionPagination page={page} pageCount={pageCount} onPageChange={setPage} />
           </div>
         </div>
+        )}
 
+        {inlinePreviewPrescription ? (
+          <div className="flex min-h-0 flex-1 flex-col p-4 pr-4 pb-24 pl-3 md:pt-0 md:pb-4">
+            <PrescriptionPdfPreview
+              prescription={inlinePreviewPrescription}
+              onBack={() => setInlinePreviewPrescription(null)}
+            />
+          </div>
+        ) : (
         <div className="flex flex-col gap-4 p-4 pr-4 pb-24 pl-3 md:pt-0 md:pb-4">
           <div className="hidden overflow-x-auto rounded-md border border-sidebar-border bg-background md:block dark:bg-black">
             <div className="min-w-[920px]">
@@ -522,6 +548,7 @@ export function PrescriptionsPage() {
             </div>
           </div>
         </div>
+        )}
       </div>
       {!isMobile && (
         <div
@@ -531,6 +558,11 @@ export function PrescriptionsPage() {
             key={selectedPrescription?.id ?? "empty"}
             prescription={selectedPrescription}
             onClose={() => setSelectedPrescription(null)}
+            onPreviewPdf={() => {
+              if (selectedPrescription) {
+                setInlinePreviewPrescription(selectedPrescription)
+              }
+            }}
           />
         </div>
       )}
@@ -547,6 +579,11 @@ export function PrescriptionsPage() {
               key={selectedPrescription?.id ?? "empty-mobile"}
               prescription={selectedPrescription}
               onClose={() => setSelectedPrescription(null)}
+              onPreviewPdf={() => {
+                if (selectedPrescription) {
+                  setInlinePreviewPrescription(selectedPrescription)
+                }
+              }}
             />
           </DrawerContent>
         </Drawer>

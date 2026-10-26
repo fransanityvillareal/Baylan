@@ -9,8 +9,6 @@ import { AuthForm } from "@/features/auth/components/AuthForm"
 import { RoleSelection } from "@/features/auth/components/RoleSelection"
 import { SignupOnboarding } from "@/features/auth/components/SignupOnboarding"
 import { DashboardLayout } from "@/features/dashboard/components/DashboardLayout"
-import { CampaignReviewPage } from "@/features/campaigns/components/CampaignReviewPage"
-import { CampaignListPage } from "@/features/campaigns/components/CampaignListPage"
 import { CalendarPage } from "@/features/calendar/components/CalendarPage"
 import { TeamManagementPage } from "@/features/team/components/TeamManagementPage"
 import { PrescriptionsPage } from "@/features/prescriptions/components/PrescriptionsPage"
@@ -49,9 +47,6 @@ createRoot(document.getElementById("root")!).render(
             <Route index element={<Navigate to="prescriptions" replace />} />
             <Route path="prescriptions" element={<PrescriptionsPage />} />
             <Route path="analytics" element={<AnalyticsPage />} />
-            <Route path="campaigns/review" element={<CampaignReviewPage />} />
-            {/* Placeholder routes for navigation */}
-            <Route path="campaigns/list" element={<CampaignListPage />} />
             <Route
               path="calendar"
               element={<DoctorOnlyPage><CalendarPage /></DoctorOnlyPage>}

@@ -6,7 +6,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-export function ScanPrescriptionModal({ children }: { children: ReactNode }) {
+export function ScanPrescriptionModal({
+  children,
+  onPrescriptionFound,
+}: {
+  children: ReactNode
+  onPrescriptionFound?: (code: string) => void
+}) {
   const [code, setCode] = useState("")
   const [scannedCode, setScannedCode] = useState<string | null>(null)
   const [open, setOpen] = useState(false)
@@ -66,8 +72,9 @@ export function ScanPrescriptionModal({ children }: { children: ReactNode }) {
           if (value) {
             setCode(value)
             setScannedCode(value)
+            onPrescriptionFound?.(value)
             stopCamera()
-            closeTimerRef.current = window.setTimeout(() => setOpen(false), 900)
+            setOpen(false)
             return
           }
         } catch {
@@ -162,7 +169,12 @@ export function ScanPrescriptionModal({ children }: { children: ReactNode }) {
               type="button"
               className="h-8 shrink-0 px-3 text-xs"
               disabled={!code.trim()}
-              onClick={() => setScannedCode(code.trim())}
+              onClick={() => {
+                const value = code.trim()
+                setScannedCode(value)
+                onPrescriptionFound?.(value)
+                setOpen(false)
+              }}
             >
               Find
             </Button>

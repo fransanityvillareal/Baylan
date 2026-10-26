@@ -12,11 +12,8 @@ import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Bell,
-  PlusCircle,
   Moon,
   Sun,
-  Droplet,
-  UserPlus,
   Check,
 } from "lucide-react"
 import {
@@ -25,13 +22,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Switch } from "@/components/ui/switch"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { useTheme } from "@/components/theme-provider"
 import { useLocation } from "react-router-dom"
 import { Fragment } from "react"
@@ -186,35 +176,6 @@ export function AppHeader() {
         </Button>
 
         <div className="h-4 w-px bg-border" />
-
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button className="h-8 gap-2 px-2 text-xs font-medium">
-              <PlusCircle className="size-3.5" />
-              <span>Quick Create</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            className="w-56 rounded-xl border-border shadow-md"
-          >
-            <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">
-              Quick Create
-            </DropdownMenuLabel>
-            <DropdownMenuItem className="cursor-pointer gap-2 rounded-md">
-              <PlusCircle className="h-4 w-4" />
-              <span>Create Campaign</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer gap-2 rounded-md">
-              <Droplet className="h-4 w-4" />
-              <span>Log Donations</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer gap-2 rounded-md">
-              <UserPlus className="h-4 w-4" />
-              <span>Invite Team Member</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
 
       {/* --- MOBILE LAYOUT --- */}

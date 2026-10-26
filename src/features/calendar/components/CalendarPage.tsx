@@ -1,7 +1,6 @@
 import * as React from "react"
 import { useMemo, useState } from "react"
 import { useIsMobile } from "@/hooks/use-mobile"
-import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer"
 import { Calendar, dateFnsLocalizer } from "react-big-calendar"
 import type { Event as RBCEvent } from "react-big-calendar"
 import format from "date-fns/format"
@@ -14,7 +13,6 @@ import enUS from "date-fns/locale/en-US"
 import { CustomToolbar } from "./CustomToolbar"
 import { CustomEvent } from "./CustomEvent"
 import { WeeklyScheduleView } from "./WeeklyScheduleView"
-import { CampaignListSidepeek } from "@/features/campaigns/components/CampaignListSidepeek"
 import { Calendar as CalendarIcon, CalendarOff } from "lucide-react"
 
 import "react-big-calendar/lib/css/react-big-calendar.css"
@@ -47,7 +45,6 @@ export function CalendarPage() {
   }, [isMobile])
 
   const [view, setView] = useState<any>('month')
-  const [selectedCampaign, setSelectedCampaign] = useState<any>(null)
 
   // Swipe gesture handling
   const [touchStartPos, setTouchStartPos] = useState<{x: number, y: number} | null>(null)
@@ -204,9 +201,7 @@ export function CalendarPage() {
     setViewDate(slotInfo.start)
   }
 
-  const handleSelectEvent = (event: AppEvent) => {
-    setSelectedCampaign(event)
-  }
+  const handleSelectEvent = () => {}
 
   // Filter events for the selected date to show in the mobile bottom section
   const selectedDateEvents = useMemo(() => {
@@ -301,34 +296,6 @@ export function CalendarPage() {
         </div>
       )}
 
-      {/* Desktop Floating Sidepeek Overlay */}
-      {!isMobile && (
-        <div
-          className={`fixed top-0 right-0 h-screen w-[100%] sm:w-[400px] z-50 transition-transform duration-300 ease-in-out shadow-2xl ${selectedCampaign ? 'translate-x-0' : 'translate-x-full'}`}
-        >
-          <CampaignListSidepeek
-            campaign={selectedCampaign}
-            onClose={() => setSelectedCampaign(null)}
-            onAction={() => { }}
-          />
-        </div>
-      )}
-
-      {/* Mobile Sidepeek Drawer (from underneath with drag-to-dismiss) */}
-      {isMobile && (
-        <Drawer open={!!selectedCampaign} onOpenChange={(open) => !open && setSelectedCampaign(null)}>
-          <DrawerContent className="p-0 bg-background dark:bg-[#0a0a0a] border-t border-sidebar-border border-x-0 border-b-0 before:hidden rounded-t-xl overflow-hidden !h-[80dvh] flex flex-col focus-visible:outline-none">
-            <div className="sr-only">
-              <DrawerTitle>Campaign Details</DrawerTitle>
-            </div>
-            <CampaignListSidepeek
-              campaign={selectedCampaign}
-              onClose={() => setSelectedCampaign(null)}
-              onAction={() => { }}
-            />
-          </DrawerContent>
-        </Drawer>
-      )}
     </div>
   )
 }
