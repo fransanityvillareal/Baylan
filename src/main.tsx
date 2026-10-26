@@ -19,6 +19,7 @@ import { AnalyticsPage } from "@/features/analytics/components/AnalyticsPage"
 import { EmptyPage } from "@/features/dashboard/components/EmptyPage"
 import { AppointmentsPage } from "@/features/appointments/components/AppointmentsPage"
 import { InventoryPage } from "@/features/inventory/components/InventoryPage"
+import { MportPage } from "@/features/mport/components/MportPage"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -30,6 +31,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/signin" element={<AuthForm />} />
           <Route path="/signup" element={<AuthForm />} />
           <Route path="/signup/onboarding" element={<SignupOnboarding />} />
+          <Route path="/mport" element={<MportPage />} />
 
           {/* Dashboard Routes */}
           <Route path="/dashboard" element={<DashboardLayout />}>

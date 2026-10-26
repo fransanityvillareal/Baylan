@@ -31,6 +31,7 @@ Use the majority-wins reference for the concern being changed:
 | Create/edit modal | Create Prescription, Medicine Form, campaign modals | Compact responsive modal with progressive disclosure |
 | Export modal | Campaign export and DataExportModal | Single-column radio groups, helper text, compact footer actions |
 | Mobile overlay | ResponsiveModal | Dialog on desktop and drawer on mobile |
+| Medicine ordering | `/mport` | Search-first marketplace, category tabs, medicine cards, cart sheet, and pharmacy availability map |
 
 Do not copy a one-off prescription, inventory, or onboarding treatment when one of these references already solves the problem.
 
@@ -203,14 +204,31 @@ Keep helper text short and muted. Do not replace these radio groups with large s
 - QR scanning uses the same compact responsive modal language as other actions: scan affordance, short helper copy, and manual prescription-code fallback.
 - Use `ScanQrCode`, `Camera`, and `CheckCircle2` Lucide icons for this flow.
 
-## 12. Icons and status language
+## 12. Medicine ordering marketplace (`/mport`)
+
+The standalone `/mport` route is a consumer-style medicine ordering surface, separate from the dashboard shell. It keeps the Baylan foundation while adopting a simpler marketplace flow:
+
+- Use a compact sticky header with brand, delivery location, help, and cart actions.
+- Lead with a prominent search field and short supporting copy.
+- Use horizontally scrollable category tabs rather than a dense filter toolbar.
+- Present medicines as compact cards with medicine name, generic name, strength, form, short description, price, and an Add/quantity control.
+- Use the existing `Card`, `Badge`, `Button`, `Input`, `Tabs`, and `Sheet` primitives; do not create a new card or drawer system.
+- The cart is a right-side `Sheet` on desktop and the shared responsive behavior on smaller screens. It must support quantity changes and show an estimated total.
+- When the cart has items, show nearby pharmacy availability with a map-like surface and pharmacy pins. Pin and pharmacy-list states must reflect whether one pharmacy can fulfill every item in the cart.
+- Use Mapbox GL JS for the `/mport` map canvas. Keep the map as an absolute full-workspace layer, initialize it with a public `VITE_MAPBOX_TOKEN`, and render pharmacy markers from longitude/latitude data rather than CSS-positioned placeholders.
+- Available pharmacy pins use `MapPin` and a readable “In stock” label. Unavailable pins remain visible but muted when there is a relevant cart selection.
+- The availability view must include a list alternative beneath the map so location status is not communicated by geography or color alone.
+- Current `/mport` availability uses frontend mock pharmacy data. A production map provider, live geolocation, stock service, checkout, and payment flow should be introduced as separate capabilities rather than embedded into the visual foundation.
+- Keep the ordering screen responsive: stack the medicine grid and availability panel on small screens, keep search usable, and avoid forcing the map/list card into a fixed desktop width.
+
+## 13. Icons and status language
 
 - Use Lucide icons only. Do not use emoji, Unicode arrows, improvised glyphs, or text symbols where a Lucide icon exists.
 - Dense controls generally use `h-3.5 w-3.5`; standalone actions use `h-4 w-4`; sidepeek property icons use the compact scale.
 - Use semantic icons consistently: `CircleAlert` for unavailable/error counts, `CheckCircle2` for success/active states, `MoreVertical` for row actions, `Download` for export/download, `RefreshCw` for refresh, `Printer` for print, and `ScanQrCode` for QR actions.
 - Status badges should combine readable text with color and, where useful, a semantic icon.
 
-## 13. Accessibility and interaction quality
+## 14. Accessibility and interaction quality
 
 - Associate every label with its input/select or use an explicit accessible label.
 - Preserve keyboard focus and visible focus rings for buttons, tabs, table rows, menus, drawers, and pagination.
@@ -220,7 +238,7 @@ Keep helper text short and muted. Do not replace these radio groups with large s
 - Separate destructive actions from the primary action and use the destructive variant or existing confirmation dialog.
 - Keep modal and drawer focus behavior delegated to the shared primitives.
 
-## 14. Implementation and review rules
+## 15. Implementation and review rules
 
 Before building a new UI pattern:
 
