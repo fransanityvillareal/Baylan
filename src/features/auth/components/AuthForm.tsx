@@ -18,7 +18,7 @@ export function AuthForm() {
       window.localStorage.setItem("baylan-role", role)
     }
     if (isLogin) {
-      navigate(`/dashboard${params.toString() ? `?${params.toString()}` : ""}`)
+      navigate(`/dashboard/prescriptions${params.toString() ? `?${params.toString()}` : ""}`)
     } else {
       navigate(`/signup/onboarding${location.search}`)
     }
@@ -61,7 +61,7 @@ export function AuthForm() {
                 }
                 navigate(
                   isLogin
-                    ? `/dashboard${params.toString() ? `?${params.toString()}` : ""}`
+                    ? `/dashboard/prescriptions${params.toString() ? `?${params.toString()}` : ""}`
                     : `/signup/onboarding${location.search}`
                 )
               }}

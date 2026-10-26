@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom"
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom"
 import {
   Sidebar,
   SidebarContent,
@@ -32,9 +32,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   CalendarDays,
   ChevronRight,
+  ClipboardList,
   FileText,
   LineChart,
   Package,
+  ShoppingCart,
   SlidersHorizontal,
   UserRoundCheck,
   UsersRound,
@@ -46,7 +48,11 @@ import bmcLogo from "@/assets/Bicol Medical Center Logo.png"
 export function AppSidebar() {
   const navigate = useNavigate()
   const location = useLocation()
+  const [searchParams] = useSearchParams()
   const { setOpenMobile } = useSidebar()
+  const isPharmacist =
+    searchParams.get("role") === "pharmacist" ||
+    window.localStorage.getItem("baylan-role") === "pharmacist"
 
   const handleNavigate = (path: string) => {
     setOpenMobile(false)
@@ -80,18 +86,27 @@ export function AppSidebar() {
         <div className="px-4 pt-2 pb-2 transition-all duration-200 ease-linear group-data-[collapsible=icon]:px-0">
           <div className="flex items-center gap-2 text-left transition-all duration-200 ease-linear group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0">
             <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-transparent ring-1 ring-border transition-all duration-200 ease-linear">
-              <img
-                src={bmcLogo}
-                alt="Bicol Medical Center"
-                className="h-full w-full object-contain p-0.5"
-              />
+              {isPharmacist ? (
+                <img
+                  src="/mercury-drugs.jpeg"
+                  aria-label="Mercury Drug"
+                  alt="Mercury Drug"
+                  className="h-full w-full object-contain p-0.5"
+                />
+              ) : (
+                <img
+                  src={bmcLogo}
+                  alt="Bicol Medical Center"
+                  className="h-full w-full object-contain p-0.5"
+                />
+              )}
             </div>
             <div className="flex max-w-[250px] flex-1 flex-col overflow-hidden text-left whitespace-nowrap transition-all duration-200 ease-linear group-data-[collapsible=icon]:max-w-0 group-data-[collapsible=icon]:opacity-0">
               <span className="text-xs font-medium text-foreground">
-                Bicol Medical Center
+                {isPharmacist ? "Mercury Drug" : "Bicol Medical Center"}
               </span>
               <span className="text-[10px] font-normal text-muted-foreground">
-                Specialized Service
+                {isPharmacist ? "Pharmacy" : "Specialized Service"}
               </span>
             </div>
           </div>
@@ -108,6 +123,28 @@ export function AppSidebar() {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
+              {isPharmacist && (
+                <>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      isActive={location.pathname === "/dashboard/point-of-sale"}
+                      onClick={() => handleNavigate("/dashboard/point-of-sale")}
+                    >
+                      <ShoppingCart className="mr-2" />
+                      <span>Point of Sale</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton
+                      isActive={location.pathname === "/dashboard/orders"}
+                      onClick={() => handleNavigate("/dashboard/orders")}
+                    >
+                      <ClipboardList className="mr-2" />
+                      <span>Orders</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </>
+              )}
               <SidebarMenuItem>
                 <SidebarMenuButton
                   isActive={location.pathname === "/dashboard/prescriptions"}
@@ -126,33 +163,39 @@ export function AppSidebar() {
                   <span>Analytics</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={location.pathname === "/dashboard/appointments"}
-                  onClick={() => handleNavigate("/dashboard/appointments")}
-                >
-                  <UserRoundCheck className="mr-2" />
-                  <span>Appointments</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={location.pathname === "/dashboard/inventory"}
-                  onClick={() => handleNavigate("/dashboard/inventory")}
-                >
-                  <Package className="mr-2" />
-                  <span>Inventory</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton
-                  isActive={location.pathname === "/dashboard/calendar"}
-                  onClick={() => handleNavigate("/dashboard/calendar")}
-                >
-                  <CalendarDays className="mr-2" />
-                  <span>Calendar</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {!isPharmacist && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    isActive={location.pathname === "/dashboard/appointments"}
+                    onClick={() => handleNavigate("/dashboard/appointments")}
+                  >
+                    <UserRoundCheck className="mr-2" />
+                    <span>Appointments</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
+              {isPharmacist && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    isActive={location.pathname === "/dashboard/inventory"}
+                    onClick={() => handleNavigate("/dashboard/inventory")}
+                  >
+                    <Package className="mr-2" />
+                    <span>Inventory</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
+              {!isPharmacist && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton
+                    isActive={location.pathname === "/dashboard/calendar"}
+                    onClick={() => handleNavigate("/dashboard/calendar")}
+                  >
+                    <CalendarDays className="mr-2" />
+                    <span>Calendar</span>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
