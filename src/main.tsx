@@ -34,7 +34,7 @@ function PharmacistOnlyPage({ children }: { children: ReactNode }) {
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider>
+    <ThemeProvider defaultTheme="light">
       <BrowserRouter>
         <Routes>
           {/* Auth Route */}

@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { Pill, Stethoscope } from "lucide-react"
+import { Moon, Pill, Stethoscope, Sun } from "lucide-react"
 import { BrandLogo } from "@/components/BrandLogo"
+import { useTheme } from "@/components/theme-provider"
 
 type Role = "doctor" | "pharmacist"
 
@@ -25,6 +26,8 @@ const roles = [
 export function RoleSelection() {
   const [selectedRole, setSelectedRole] = useState<Role | null>(null)
   const navigate = useNavigate()
+  const { theme, setTheme } = useTheme()
+  const isDark = theme === "dark"
 
   const continueToSignup = () => {
     if (selectedRole) {
@@ -34,15 +37,24 @@ export function RoleSelection() {
   }
 
   return (
-    <main className="flex min-h-svh w-full items-center justify-center overflow-hidden bg-[#171717] px-6 py-6 text-white">
+    <main className="relative flex min-h-svh w-full items-center justify-center overflow-hidden bg-background px-6 py-6 text-foreground">
+      <button
+        type="button"
+        aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
+        onClick={() => setTheme(isDark ? "light" : "dark")}
+        className="absolute right-6 top-6 rounded-md p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+      >
+        {isDark ? <Sun className="size-4" /> : <Moon className="size-4" />}
+      </button>
+
       <div className="flex w-full max-w-[500px] flex-col items-center">
         <BrandLogo className="mb-6" />
 
         <div className="mb-6 text-center">
-          <h1 className="mb-1 text-[21px] font-semibold tracking-[-0.02em] text-white">
+          <h1 className="mb-1 text-[21px] font-semibold tracking-[-0.02em] text-foreground">
             Welcome!
           </h1>
-          <p className="text-[14px] text-[#999999]">
+          <p className="text-[14px] text-muted-foreground">
             Select your professional role to continue
           </p>
         </div>
@@ -58,13 +70,14 @@ export function RoleSelection() {
                 type="button"
                 aria-pressed={isSelected}
                 onClick={() => {
+                  setSelectedRole(role.id)
                   window.localStorage.setItem("baylan-role", role.id)
                   navigate(`/signin?role=${role.id}`)
                 }}
-                className={`flex h-[260px] flex-col rounded-xl border bg-[#0d0d0d] p-5 text-left transition-colors focus-visible:ring-2 focus-visible:ring-[#ff3a3a] focus-visible:outline-none ${
+                className={`flex h-[260px] flex-col rounded-xl border bg-card p-5 text-left transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ${
                   isSelected
-                    ? "border-[#ff3a3a]"
-                    : "border-[#3b3b3b] hover:border-[#686868]"
+                    ? "border-primary"
+                    : "border-border hover:border-primary/60"
                 }`}
               >
                 <div className="flex flex-1 items-center justify-center">
@@ -75,10 +88,10 @@ export function RoleSelection() {
                   />
                 </div>
                 <div>
-                  <h2 className="mb-1 text-lg font-semibold text-[#e8e8e8]">
+                  <h2 className="mb-1 text-lg font-semibold text-card-foreground">
                     {role.name}
                   </h2>
-                  <p className="flex items-center gap-2 text-[14px] text-[#999999]">
+                  <p className="flex items-center gap-2 text-[14px] text-muted-foreground">
                     <Icon size={16} strokeWidth={1.5} aria-hidden="true" />
                     {role.description}
                   </p>
@@ -88,19 +101,19 @@ export function RoleSelection() {
           })}
         </div>
 
-        <p className="mt-3 text-[14px] text-[#999999]">
+        <p className="mt-3 text-[14px] text-muted-foreground">
           Don&apos;t have an account?{" "}
           <button
             type="button"
             onClick={continueToSignup}
             disabled={!selectedRole}
-            className="underline underline-offset-2 transition-colors hover:text-white disabled:cursor-not-allowed"
+            className="underline underline-offset-2 transition-colors hover:text-primary disabled:cursor-not-allowed"
           >
             Sign up
           </button>
         </p>
 
-        <p className="mt-6 text-center text-xs leading-relaxed text-[#999999]">
+        <p className="mt-6 text-center text-xs leading-relaxed text-muted-foreground">
           By clicking continue, you agree to
           <br />
           our{" "}

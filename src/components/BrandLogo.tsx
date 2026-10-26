@@ -12,7 +12,11 @@ export function BrandLogo({
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       <img src="/baylan-logo.svg" alt="Baylan logo" className={iconClassName} />
-      <img src="/baylan-text.svg" alt="Baylan" className={textClassName} />
+      <img
+        src="/baylan-text.svg"
+        alt="Baylan"
+        className={`baylan-wordmark ${textClassName}`}
+      />
     </div>
   )
 }
