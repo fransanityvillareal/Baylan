@@ -54,6 +54,12 @@ export function AppHeader() {
     if (path === "/dashboard/inventory") {
       return { section: "Clinical Operations", items: ["Inventory"] }
     }
+    if (path === "/dashboard/point-of-sale") {
+      return { section: "Clinical Operations", items: ["Point of Sale"] }
+    }
+    if (path === "/dashboard/orders") {
+      return { section: "Clinical Operations", items: ["Orders"] }
+    }
     if (path === "/dashboard/calendar") {
       return { section: "Clinical Operations", items: ["Calendar"] }
     }
@@ -82,7 +88,7 @@ export function AppHeader() {
       }
     }
 
-    return { section: "Core Operations", items: ["Dashboard"] }
+    return { section: "Clinical Operations", items: ["Prescriptions"] }
   })()
 
   return (
@@ -94,7 +100,7 @@ export function AppHeader() {
         <Breadcrumb>
           <BreadcrumbList className="text-xs">
             <BreadcrumbItem>
-              <BreadcrumbLink href="/dashboard">
+              <BreadcrumbLink href="/dashboard/prescriptions">
                 {breadcrumbs.section}
               </BreadcrumbLink>
             </BreadcrumbItem>

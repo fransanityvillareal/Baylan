@@ -6,8 +6,6 @@ import {
   CalendarRange,
   ChevronLeft,
   ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
   CircleAlert,
   Download,
   Filter,
@@ -35,6 +33,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -73,6 +79,12 @@ const prescriptions = [
     unavailable: 1,
     issued: "Jun 07, 2026 - 03:15 PM",
   },
+  { id: "RX-2026-0846", patient: "Carlo Mendoza", items: 2, unavailable: 0, issued: "Jun 06, 2026 - 04:40 PM" },
+  { id: "RX-2026-0845", patient: "Liza Fernandez", items: 3, unavailable: 1, issued: "Jun 06, 2026 - 02:10 PM" },
+  { id: "RX-2026-0844", patient: "Jose Ramirez", items: 1, unavailable: 0, issued: "Jun 05, 2026 - 11:25 AM" },
+  { id: "RX-2026-0843", patient: "Nina Garcia", items: 5, unavailable: 2, issued: "Jun 05, 2026 - 09:50 AM" },
+  { id: "RX-2026-0842", patient: "Rafael Aquino", items: 2, unavailable: 0, issued: "Jun 04, 2026 - 03:30 PM" },
+  { id: "RX-2026-0841", patient: "Sofia Reyes", items: 4, unavailable: 1, issued: "Jun 04, 2026 - 01:15 PM" },
 ]
 
 export function PrescriptionsPage() {
@@ -88,6 +100,10 @@ export function PrescriptionsPage() {
   const [activeFilters, setActiveFilters] = useState<Record<string, string[]>>(
     {}
   )
+  const [page, setPage] = useState(1)
+  const pageSize = 9
+  const pageCount = Math.max(1, Math.ceil(prescriptions.length / pageSize))
+  const pagePrescriptions = prescriptions.slice((page - 1) * pageSize, page * pageSize)
   const isMobile = useIsMobile()
   const filterOptions = {
     Status: ["Active", "Pending", "Cancelled"],
@@ -331,20 +347,7 @@ export function PrescriptionsPage() {
             </div>
           </div>
           <div className="flex items-center justify-between border-t border-sidebar-border pt-3 text-xs text-muted-foreground md:hidden">
-            <span>Page 1 of 1</span>
-            <div className="flex gap-1">
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-7 w-7"
-                disabled
-              >
-                <ChevronLeft className="h-3 w-3" />
-              </Button>
-              <Button variant="outline" size="icon" className="h-7 w-7">
-                <ChevronRight className="h-3 w-3" />
-              </Button>
-            </div>
+            <PrescriptionPagination page={page} pageCount={pageCount} onPageChange={setPage} />
           </div>
         </div>
 
@@ -356,7 +359,7 @@ export function PrescriptionsPage() {
                   <TableRow className="border-sidebar-border hover:bg-transparent">
                     <TableHead className="w-12 pl-4 text-center">
                       <Checkbox
-                        checked={selected.length === prescriptions.length}
+                        checked={selected.length === pagePrescriptions.length}
                         onCheckedChange={(checked) =>
                           toggleAll(checked === true)
                         }
@@ -385,7 +388,7 @@ export function PrescriptionsPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {prescriptions.map((prescription) => (
+                  {pagePrescriptions.map((prescription) => (
                     <TableRow
                       key={prescription.id}
                       className={`group cursor-pointer border-sidebar-border transition-colors ${selectedPrescription?.id === prescription.id ? "bg-accent dark:bg-white/10" : "hover:bg-accent dark:hover:bg-white/5"}`}
@@ -481,7 +484,7 @@ export function PrescriptionsPage() {
             </div>
           </div>
           <div className="flex flex-col gap-3 md:hidden">
-            {prescriptions.map((prescription) => (
+            {pagePrescriptions.map((prescription) => (
               <div
                 key={prescription.id}
                 className={`flex cursor-pointer flex-col gap-3 rounded-xl border border-sidebar-border bg-card p-4 transition-colors dark:bg-[#111] ${selectedPrescription?.id === prescription.id ? "ring-1 ring-ring dark:ring-white/20" : "hover:bg-accent dark:hover:bg-white/5"}`}
@@ -515,31 +518,7 @@ export function PrescriptionsPage() {
               {selected.length} of {prescriptions.length} row(s) selected.
             </span>
             <div className="flex items-center gap-4">
-              <span>
-                Rows per page{" "}
-                <Button
-                  variant="outline"
-                  className="ml-2 h-7 w-14 px-2 text-xs"
-                >
-                  10⌄
-                </Button>
-              </span>
-              <span>Page 1 of 1</span>
-              <div className="flex gap-1">
-                {[ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight].map(
-                  (Icon, index) => (
-                    <Button
-                      key={index}
-                      variant="outline"
-                      size="icon"
-                      className="h-7 w-7"
-                      disabled={index < 2}
-                    >
-                      <Icon className="h-3 w-3" />
-                    </Button>
-                  )
-                )}
-              </div>
+              <PrescriptionPagination page={page} pageCount={pageCount} onPageChange={setPage} />
             </div>
           </div>
         </div>
@@ -573,5 +552,33 @@ export function PrescriptionsPage() {
         </Drawer>
       )}
     </div>
+  )
+}
+
+function PrescriptionPagination({
+  page,
+  pageCount,
+  onPageChange,
+}: {
+  page: number
+  pageCount: number
+  onPageChange: (page: number) => void
+}) {
+  return (
+    <Pagination className="mx-0 w-auto justify-end">
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious href="#" aria-disabled={page === 1} className={page === 1 ? "pointer-events-none opacity-50" : ""} onClick={(event) => { event.preventDefault(); onPageChange(Math.max(1, page - 1)) }} />
+        </PaginationItem>
+        {Array.from({ length: pageCount }, (_, index) => index + 1).map((pageNumber) => (
+          <PaginationItem key={pageNumber}>
+            <PaginationLink href="#" isActive={page === pageNumber} onClick={(event) => { event.preventDefault(); onPageChange(pageNumber) }}>{pageNumber}</PaginationLink>
+          </PaginationItem>
+        ))}
+        <PaginationItem>
+          <PaginationNext href="#" aria-disabled={page === pageCount} className={page === pageCount ? "pointer-events-none opacity-50" : ""} onClick={(event) => { event.preventDefault(); onPageChange(Math.min(pageCount, page + 1)) }} />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
   )
 }
